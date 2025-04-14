@@ -1,7 +1,6 @@
 ﻿
 using bookingApp.Managers;
 using bookingApp.Models;
-using System.Text.Json;
 
 public class BookingApp
 {
@@ -10,7 +9,7 @@ public class BookingApp
     {
         if (args.Length != 4 || args[0] != "--hotels" || args[2] != "--bookings")
         {
-            Console.WriteLine("Usage: myapp --hotels <hotels.json> --bookings <bookings.json>");
+            Console.WriteLine("Usage: bookingApp --hotels <hotels.json> --bookings <bookings.json>");
             return;
         }
 
@@ -22,7 +21,13 @@ public class BookingApp
             Console.WriteLine("Error: One or both of the specified files do not exist.");
             return;
         }
-        HotelManager hotelManager = new HotelManager(hotelsFilePath, bookingsFilePath);
+
+        const string invalidCommandMessage = $"Invalid command. Example:  \nAvailability(H1, 20240901, SGL)" +
+                    $"\nAvailability(H1, 20240901-20240903, DBL) " +
+                    $"\nRoomTypes(H1, 20240904, 3) " +
+                    $"\nRoomTypes(H1, 20240905-20240907, 5) ";
+
+		HotelManager hotelManager = new HotelManager(hotelsFilePath, bookingsFilePath);
         string? input;
         Console.WriteLine("Enter commands (Availability or RoomTypes) or a blank line to exit:");
 
@@ -42,7 +47,7 @@ public class BookingApp
                         ParseHotelIdAndDateRange(hotelId, dateRange, hotelManager, out var hotel, out var arrival, out var departure);
 						var availableRooms = hotelManager.AvailableRoomsForPeriod(hotel, arrival, departure);
                         var numberOfRoomsAvailable = availableRooms.ContainsKey(roomType) ? availableRooms[roomType] : 0;
-						Console.WriteLine($"Room Type: {roomType}, Available Rooms: {numberOfRoomsAvailable}");
+						Console.WriteLine($"Room Type: {roomType}, Available Rooms: {numberOfRoomsAvailable}\n");
                     }
                     else
                     {
@@ -61,7 +66,7 @@ public class BookingApp
 						ParseHotelIdAndDateRange(hotelId, dateRange, hotelManager, out var hotel, out var arrival, out var departure);
 						var roomTypes = hotelManager.BookRoomTypes(hotel, numberOfPeople, arrival, departure);
                         roomTypes.Keys.ToList().ForEach(k => RepeatWriteOnConsole(k, roomTypes[k]));
-                        Console.WriteLine();
+                        Console.WriteLine('\n');
 					}
                     else
                     {
@@ -70,7 +75,7 @@ public class BookingApp
                 }
                 else
                 {
-                    Console.WriteLine("Invalid command.");
+                    Console.WriteLine(invalidCommandMessage);
                 }
             }
             catch (FormatException)
@@ -79,7 +84,7 @@ public class BookingApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine(invalidCommandMessage);
             }
         }
     }
