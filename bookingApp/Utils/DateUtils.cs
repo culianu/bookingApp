@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bookingApp.Utils
+namespace BookingApp.Utils
 {
 	public class DateUtils
 	{

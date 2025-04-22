@@ -1,14 +1,8 @@
-﻿using bookingApp.Models;
+﻿using BookingApp.Models;
+using BookingApp.Utils;
 using System.Text.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using bookingApp.Utils;
-using System.Collections.Immutable;
 
-namespace bookingApp.Managers
+namespace BookingApp.Managers
 {
 	public class HotelManager
 	{
@@ -24,15 +18,12 @@ namespace bookingApp.Managers
 		{
 			hotels = LoadHotels(hotelJsonPath);
 			bookings = LoadBookings(bookingsJsonPath);
-			//var hotel = GetHotel("H1");
-			//if (hotel == null)
-			//{
-			//	Console.WriteLine("Hotel not found");
-			//	return;
-			//}
-			//var ceva = BookedRoomsForPeriod(hotel, new DateOnly(2024, 09, 01), new DateOnly(2024, 09, 03));
-			//var altceva = AvailableRoomsForPeriod(hotel, new DateOnly(2024, 09, 01), new DateOnly(2024, 09, 03));
-			//var diferit = BookRoomTypes(hotel, 3, new DateOnly(2024, 09, 04), new DateOnly(2024, 09, 04));
+		}
+
+		public HotelManager(List<Hotel> hotels, List<Booking> bookings)
+		{
+			this.hotels = hotels;
+			this.bookings = bookings;
 		}
 
 		public Hotel? GetHotel(string hotelId)
